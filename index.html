@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Legal AI</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="manifest" href="manifest.json">
+    <style>
+        body { font-family: Arial; max-width: 800px; margin: 0 auto; padding: 20px; }
+        #response { background: #f5f5f5; padding: 15px; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <h1>Legal Assistant</h1>
+    <input id="question" placeholder="Ask about your case..." style="width: 100%; padding: 10px;">
+    <button onclick="askAI()">Submit</button>
+    <div id="response"></div>
+
+    <script>
+        async function askAI() {
+            const question = document.getElementById('question').value;
+            document.getElementById('response').innerText = "Thinking...";
+            
+            try {
+                const response = await fetch("YOUR_API_URL/ask", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ instruction: question })
+                });
+                const data = await response.json();
+                document.getElementById('response').innerText = data.response;
+            } catch (error) {
+                document.getElementById('response').innerText = "Error: " + error.message;
+            }
+        }
+    </script>
+</body>
+</html>
