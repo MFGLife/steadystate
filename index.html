@@ -16,20 +16,35 @@
     <div id="response"></div>
 
     <script>
+        // Configure this based on your deployment
+        const API_URL = "https://trantum.onrender.com";  // ← Change this!
+    
         async function askAI() {
             const question = document.getElementById('question').value;
+            if (!question) {
+                alert("Please enter a question!");
+                return;
+            }
+    
             document.getElementById('response').innerText = "Thinking...";
             
             try {
-                const response = await fetch("YOUR_API_URL/ask", {
+                const response = await fetch(`${API_URL}/ask`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ instruction: question })
+                    body: JSON.stringify({ 
+                        instruction: question,
+                        context: ""  // Add case details if needed
+                    })
                 });
+                
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                
                 const data = await response.json();
                 document.getElementById('response').innerText = data.response;
             } catch (error) {
-                document.getElementById('response').innerText = "Error: " + error.message;
+                document.getElementById('response').innerText = 
+                    `Failed to get response. ${error.message}\n\nIs your API running at ${API_URL}?`;
             }
         }
     </script>
